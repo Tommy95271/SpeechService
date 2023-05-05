@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechService", "SpeechService\SpeechService.csproj", "{A406F07A-B0FA-45CF-ADD2-6D9A596B208A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechServices", "SpeechServices\SpeechServices.csproj", "{1315C7A0-58BD-4720-B893-A75A7E9AC9AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A406F07A-B0FA-45CF-ADD2-6D9A596B208A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A406F07A-B0FA-45CF-ADD2-6D9A596B208A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A406F07A-B0FA-45CF-ADD2-6D9A596B208A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A406F07A-B0FA-45CF-ADD2-6D9A596B208A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1315C7A0-58BD-4720-B893-A75A7E9AC9AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1315C7A0-58BD-4720-B893-A75A7E9AC9AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1315C7A0-58BD-4720-B893-A75A7E9AC9AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1315C7A0-58BD-4720-B893-A75A7E9AC9AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
