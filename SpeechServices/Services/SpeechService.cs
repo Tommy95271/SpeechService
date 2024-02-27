@@ -14,15 +14,15 @@ namespace SpeechServices.Services
         internal async Task Execute()
         {
             var speechConfig = SpeechConfig.FromSubscription("key", "region");
-            speechConfig.SpeechRecognitionLanguage = "en";
-            speechConfig.SpeechSynthesisVoiceName = "en-US-JennyNeural";
+            speechConfig.SpeechSynthesisLanguage = "en";
+            speechConfig.SpeechSynthesisVoiceName = "en-US-AndrewNeural";
+            speechConfig.SpeechRecognitionLanguage = "zh-TW";
+            speechConfig.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000");
+            speechConfig.SetProperty(PropertyId.Speech_LogFilename, "./mylog2");
 
             var speechTranslationConfig = SpeechTranslationConfig.FromSubscription("key", "region");
             speechTranslationConfig.SpeechRecognitionLanguage = "zh-TW";
             speechTranslationConfig.AddTargetLanguage("en");
-            speechConfig.SpeechRecognitionLanguage = "zh-TW";
-            speechConfig.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000");
-            speechConfig.SetProperty(PropertyId.Speech_LogFilename, "./mylog2");
             //await FromFile(speechConfig);
             //await FromMicrophone(speechConfig);
             //await TranslateFromMicrophone(speechTranslationConfig);
