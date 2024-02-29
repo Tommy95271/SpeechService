@@ -1,18 +1,25 @@
 ﻿using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.CognitiveServices.Speech.Translation;
+using SpeechLibrary.Models;
 
 namespace SpeechLibrary.Services
 {
     public class SpeechService
     {
-        public async Task<string?> TranslateFromMicrophone(SpeechTranslationConfig speechTranslationConfig)
+        public async Task<SpeechModel> TranslateFromMicrophone(SpeechTranslationConfig speechTranslationConfig)
         {
             using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
             using var translationRecognizer = new TranslationRecognizer(speechTranslationConfig, audioConfig);
 
             var result = await translationRecognizer.RecognizeOnceAsync();
-            return result.Translations.Values.FirstOrDefault();
+
+            return new SpeechModel
+            {
+                Id = result.ResultId,
+                Text = result.Text,
+                Translation = result.Translations.Values.FirstOrDefault()
+            };
         }
 
         public async Task PlayTextAsAudio(SpeechTranslationConfig speechTranslationConfig, string? text)
