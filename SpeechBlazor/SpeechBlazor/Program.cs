@@ -1,4 +1,4 @@
-using SpeechBlazor.Client.Pages;
+using SpeechBlazor.Client.Services;
 using SpeechBlazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+CommonServices.ConfigureCommonServices(builder.Services);
 
 var app = builder.Build();
 
