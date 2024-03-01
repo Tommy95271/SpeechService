@@ -15,11 +15,7 @@ builder.Services.AddScoped<SpeechService>();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost");
-                      });
+    options.AddPolicy(MyAllowSpecificOrigins, policy => { policy.WithOrigins("https://localhost:7130"); });
 });
 
 var app = builder.Build();
