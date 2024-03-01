@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SpeechAPI.Services;
+using SpeechLibrary.Enums;
 using SpeechLibrary.Models;
 
 namespace SpeechAPI.Controllers
@@ -22,6 +23,12 @@ namespace SpeechAPI.Controllers
         {
             var result = await _speechAPIService.TranslateFromMicrophoneAsync();
             return result;
+        }
+
+        [HttpGet]
+        public List<LanguageEnum> GetLanguageEnums()
+        {
+            return Enum.GetValues(typeof(LanguageEnum)).Cast<LanguageEnum>().ToList();
         }
     }
 }
