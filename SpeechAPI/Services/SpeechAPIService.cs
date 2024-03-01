@@ -10,16 +10,18 @@ namespace SpeechAPI.Services
         private string Region { get; set; }
         private readonly SpeechService _speechService;
 
+        public SpeechTranslationConfig _speechTranslationConfig { get; set; }
+
         public SpeechAPIService(SpeechService speechService)
         {
             Key = "key";
             Region = "region";
             _speechService = speechService;
+            _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
         }
 
         public async Task<SpeechModel> TranslateFromMicrophoneAsync()
         {
-            var _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
             _speechTranslationConfig.SpeechRecognitionLanguage = "zh-TW";
             _speechTranslationConfig.AddTargetLanguage("ja-JP");
             _speechTranslationConfig.SpeechSynthesisLanguage = "ja-JP";
@@ -30,13 +32,12 @@ namespace SpeechAPI.Services
 
         public async Task PlayTextAsAudioAsync(string text)
         {
-            var speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
-            await _speechService.PlayTextAsAudioAsync(speechTranslationConfig, text);
+            await _speechService.PlayTextAsAudioAsync(_speechTranslationConfig, text);
         }
 
         public async Task StopAudioAsync()
         {
-            //await _speechService.StopAudioAsync(_speechTranslationConfig);
+            await _speechService.StopAudioAsync(_speechTranslationConfig);
         }
     }
 }
