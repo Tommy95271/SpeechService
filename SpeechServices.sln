@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechServices", "SpeechSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechLibrary", "SpeechLibrary\SpeechLibrary.csproj", "{CDBDDCA0-EDCC-4064-B3BC-65EAC731AE69}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechAPI", "SpeechAPI\SpeechAPI.csproj", "{76253707-AA68-43A0-8580-B328C221D51F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CDBDDCA0-EDCC-4064-B3BC-65EAC731AE69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDBDDCA0-EDCC-4064-B3BC-65EAC731AE69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBDDCA0-EDCC-4064-B3BC-65EAC731AE69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76253707-AA68-43A0-8580-B328C221D51F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76253707-AA68-43A0-8580-B328C221D51F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76253707-AA68-43A0-8580-B328C221D51F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76253707-AA68-43A0-8580-B328C221D51F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
