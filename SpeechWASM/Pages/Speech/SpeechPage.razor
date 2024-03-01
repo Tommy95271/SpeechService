@@ -1,0 +1,12 @@
+﻿@page "/"
+
+<h3>SpeechPage</h3>
+
+<button class="btn btn-primary" @onclick="Translate">Speak</button>
+
+<div class="container mt-5">
+    @foreach (var item in SpeechModels)
+    {
+        <Card Order="@item.Order" Text="@item.Text" Translation="@item.Translation"></Card>
+    }
+</div>
