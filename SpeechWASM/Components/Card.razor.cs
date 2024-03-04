@@ -9,6 +9,10 @@ namespace SpeechWASM.Components
         [Parameter]
         public string? Text { get; set; }
         [Parameter]
+        public string? TextLocale { get; set; }
+        [Parameter]
         public string? Translation { get; set; }
+        [Parameter]
+        public string? TranslationLocale { get; set; }
     }
 }

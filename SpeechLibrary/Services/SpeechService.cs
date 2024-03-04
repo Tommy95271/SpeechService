@@ -15,9 +15,9 @@ namespace SpeechLibrary.Services
 
         public async Task<SpeechModel> TranslateFromMicrophoneAsync(SpeechTranslationConfig speechTranslationConfig, SpeechReq request)
         {
-            speechTranslationConfig.SpeechRecognitionLanguage = request.SourceLanguage.GetDescriptionText();
-            speechTranslationConfig.AddTargetLanguage(request.TargetLanguage.GetDescriptionText());
-            speechTranslationConfig.SpeechSynthesisLanguage = request.TargetLanguage.GetDescriptionText();
+            speechTranslationConfig.SpeechRecognitionLanguage = request.SourceLanguage.GetLanguageDescription();
+            speechTranslationConfig.AddTargetLanguage(request.TargetLanguage.GetLanguageDescription());
+            speechTranslationConfig.SpeechSynthesisLanguage = request.TargetLanguage.GetLanguageDescription();
             var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
             translationRecognizer = new TranslationRecognizer(speechTranslationConfig, audioConfig);
 
@@ -28,7 +28,9 @@ namespace SpeechLibrary.Services
                 {
                     Id = result.ResultId,
                     Text = result.Text,
-                    Translation = result.Translations.Values.FirstOrDefault()
+                    TextLocale = request.SourceLanguage.GetLanguageName(),
+                    Translation = result.Translations.Values.FirstOrDefault(),
+                    TranslationLocale = request.TargetLanguage.GetLanguageName(),
                 };
 
             }

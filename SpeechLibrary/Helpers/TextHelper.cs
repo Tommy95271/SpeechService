@@ -11,7 +11,7 @@ namespace SpeechLibrary.Helpers
 {
     public static class TextHelper
     {
-        public static string GetDescriptionText(this Enum value)
+        public static string GetLanguageDescription(this Enum value)
         {
             if (value == null)
             {
@@ -28,6 +28,22 @@ namespace SpeechLibrary.Helpers
             return attribute?.Description ?? value.ToString();
         }
 
+        public static string GetLanguageName(this Enum value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            var field = value.GetType().GetField(value.ToString());
+            if (field == null)
+            {
+                return value.ToString();
+            }
+
+            return Enum.GetName(value.GetType(),value) ?? value.ToString();
+        }
+
         public static List<(Enum, string, string)> GetEnumDescriptions(this Type enumType)
         {
             if (!enumType.IsEnum)
@@ -36,7 +52,7 @@ namespace SpeechLibrary.Helpers
             }
 
             return Enum.GetValues(enumType).Cast<Enum>()
-                       .Select(value => (value, GetDescriptionText(value), Enum.GetName(enumType, value) ?? string.Empty))
+                       .Select(value => (value, GetLanguageDescription(value), Enum.GetName(enumType, value) ?? string.Empty))
                        .ToList();
         }
     }

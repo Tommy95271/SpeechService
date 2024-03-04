@@ -9,21 +9,28 @@ namespace SpeechWASM.Pages.Speech
     public partial class SpeechPage
     {
         [Inject]
-        public HttpClient httpClient { get; set; }
-        public int Order { get; set; }
+        private HttpClient httpClient { get; set; }
+        private int order { get; set; }
+        private LanguageEnum targetLanguage { get; set; }
+        private LanguageEnum sourceLanguage { get; set; }
+        private List<SpeechModel> speechModels { get; set; }
+        private List<SpeechEnumModel> sourceLanguages { get; set; }
+        private List<SpeechEnumModel> targetLanguages { get; set; }
 
-        public List<SpeechModel> SpeechModels { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            SpeechModels = new List<SpeechModel>();
-            Order = 1;
+            speechModels = new List<SpeechModel>();
+            sourceLanguages = new List<SpeechEnumModel>();
+            targetLanguages = new List<SpeechEnumModel>();
+            await GetEnums();
+            order = 1;
         }
 
         private async Task Translate()
         {
             LanguageEnum source, target;
             SpeechReq req;
-            if (Enum.TryParse("0", out source) && Enum.TryParse("2", out target))
+            if (Enum.TryParse(targetLanguage.ToString(), out target) && Enum.TryParse(sourceLanguage.ToString(), out source))
             {
                 req = new SpeechReq { SourceLanguage = source, TargetLanguage = target };
             }
@@ -37,14 +44,42 @@ namespace SpeechWASM.Pages.Speech
                 var content = JsonSerializer.Deserialize<SpeechModel>(await result.Content.ReadAsStringAsync());
                 if (content != null)
                 {
-                    SpeechModels.Add(new SpeechModel
+                    speechModels.Add(new SpeechModel
                     {
                         Id = content.Id,
-                        Order = Order++,
+                        Order = order++,
                         Text = content.Text,
+                        TextLocale = content.TextLocale,
                         Translation = content.Translation,
+                        TranslationLocale = content.TranslationLocale,
                     });
                 }
+            }
+        }
+
+        private async Task GetEnums()
+        {
+            var result = await httpClient.GetAsync("Speech/GetLanguageEnums");
+            if (result != null && result.IsSuccessStatusCode)
+            {
+                var content = JsonSerializer.Deserialize<List<SpeechEnumModel>>(await result.Content.ReadAsStringAsync());
+                if (content != null)
+                {
+                    sourceLanguages = content;
+                    targetLanguages = content;
+                }
+            }
+        }
+
+        private void SetLocale(LanguageEnum value, int languageOrder)
+        {
+            if (languageOrder == 0)
+            {
+                sourceLanguage = value;
+            }
+            else
+            {
+                targetLanguage = value;
             }
         }
     }

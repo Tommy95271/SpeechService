@@ -4,9 +4,46 @@
 
 <button class="btn btn-primary" @onclick="Translate">Speak</button>
 
-<div class="container mt-5">
-    @foreach (var item in SpeechModels)
+<div class="my-2">
+    <h3>Source language</h3>
+    @if (sourceLanguages != null && sourceLanguages.Count > 0)
     {
-        <Card Order="@item.Order" Text="@item.Text" Translation="@item.Translation"></Card>
+        <div class="btn-group" role="group" aria-label="Source language Selector">
+            @foreach (var locale in sourceLanguages)
+            {
+                <button type="button" class="@($"btn {(sourceLanguage == locale.Value ? "btn-primary" : "btn-secondary")}")" @onclick="() => SetLocale(locale.Value, 0)">
+                    @locale.Text
+                </button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Loading locales...</p>
+    }
+</div>
+<div class="my-2">
+    <h3>Target language</h3>
+    @if (targetLanguages != null && targetLanguages.Count > 0)
+    {
+        <div class="btn-group" role="group" aria-label="Target language Selector">
+            @foreach (var locale in targetLanguages)
+            {
+                <button type="button" class="@($"btn {(targetLanguage == locale.Value ? "btn-primary" : "btn-secondary")}")" @onclick="() => SetLocale(locale.Value, 1)">
+                    @locale.Text
+                </button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Loading locales...</p>
+    }
+</div>
+
+<div class="container mt-5">
+    @foreach (var item in speechModels)
+    {
+        <Card Order="@item.Order" Text="@item.Text" TextLocale="@item.TextLocale" Translation="@item.Translation" TranslationLocale="@item.TranslationLocale"></Card>
     }
 </div>

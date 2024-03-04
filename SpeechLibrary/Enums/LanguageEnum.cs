@@ -10,12 +10,14 @@ namespace SpeechLibrary.Enums
     public enum LanguageEnum
     {
         [Description("zh-TW")]
-        Taiwan,
+        Taiwanese,
         [Description("en-US")]
         English,
         [Description("ja-JP")]
-        Japan,
+        Japanese,
         [Description("ko-KR")]
-        Korea,
+        Korean,
+        [Description("vi-VN")]
+        Vietnamese,
     }
 }
