@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<SpeechAPIService>();
-builder.Services.AddScoped<SpeechService>();
+builder.Services.AddSingleton<SpeechAPIService>();
+builder.Services.AddSingleton<SpeechService>();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {

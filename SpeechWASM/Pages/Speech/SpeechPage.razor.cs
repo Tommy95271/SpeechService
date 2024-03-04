@@ -12,6 +12,8 @@ namespace SpeechWASM.Pages.Speech
         [Inject]
         private HttpClient httpClient { get; set; }
         private int order { get; set; }
+        private bool isCancelled { get; set; }
+        private bool isSpeaking { get; set; }
         private LanguageEnum targetLanguage { get; set; }
         private LanguageEnum sourceLanguage { get; set; }
         private List<CardModel> Models { get; set; }
@@ -25,15 +27,17 @@ namespace SpeechWASM.Pages.Speech
             targetLanguages = new List<SpeechEnumModel>();
             await GetEnums();
             order = 1;
+            isSpeaking = true;
         }
 
         private async Task Translate()
         {
+            isSpeaking = false;
             LanguageEnum source, target;
-            SpeechReq req;
+            SpeechRequest req;
             if (Enum.TryParse(targetLanguage.ToString(), out target) && Enum.TryParse(sourceLanguage.ToString(), out source))
             {
-                req = new SpeechReq { SourceLanguage = source, TargetLanguage = target };
+                req = new SpeechRequest { SourceLanguage = source, TargetLanguage = target };
             }
             else
             {
@@ -42,17 +46,33 @@ namespace SpeechWASM.Pages.Speech
             var result = await httpClient.PostAsJsonAsync("Speech/TranslateFromMicrophoneAndPlay", req);
             if (result != null && result.IsSuccessStatusCode)
             {
-                var content = JsonSerializer.Deserialize<SpeechModel>(await result.Content.ReadAsStringAsync());
+                var content = JsonSerializer.Deserialize<SpeechResponse>(await result.Content.ReadAsStringAsync());
                 if (content != null)
                 {
+                    var model = content.Model;
                     Models.Add(new CardModel
                     {
                         Order = order++,
-                        Text = content.Text,
-                        TextLocale = content.TextLocale,
-                        Translation = content.Translation,
-                        TranslationLocale = content.TranslationLocale,
+                        Text = model.Text,
+                        TextLocale = model.TextLocale,
+                        Translation = model.Translation,
+                        TranslationLocale = model.TranslationLocale,
                     });
+                }
+            }
+            isSpeaking = true;
+            isCancelled = false;
+        }
+
+        private async Task Stop()
+        {
+            var result = await httpClient.GetAsync("Speech/StopPlayingAudio");
+            if (result != null && result.IsSuccessStatusCode)
+            {
+                var content = JsonSerializer.Deserialize<SpeechResponse>(await result.Content.ReadAsStringAsync());
+                if (content != null)
+                {
+                    isCancelled = content.IsCancelled;
                 }
             }
         }

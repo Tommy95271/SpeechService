@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpeechLibrary.Models
 {
-    public class SpeechReq
+    public class SpeechRequest
     {
         public LanguageEnum SourceLanguage { get; set; }
         public LanguageEnum TargetLanguage { get; set; }

@@ -20,10 +20,10 @@ namespace SpeechAPI.Services
             _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
         }
 
-        public async Task<SpeechModel> TranslateFromMicrophoneAsync(SpeechReq request)
+        public async Task<SpeechResponse> TranslateFromMicrophoneAsync(SpeechRequest request)
         {
             var result = await _speechService.TranslateFromMicrophoneAsync(_speechTranslationConfig, request);
-            await PlayTextAsAudioAsync(result.Translation ?? "test");
+            await PlayTextAsAudioAsync(result.Model.Translation ?? "test");
             return result;
         }
 
@@ -38,9 +38,9 @@ namespace SpeechAPI.Services
             return result;
         }
 
-        public async Task StopAudioAsync()
+        public async Task<SpeechResponse> StopAudioAsync()
         {
-            await _speechService.StopAudioAsync(_speechTranslationConfig);
+            return await _speechService.StopAudioAsync(_speechTranslationConfig);
         }
     }
 }

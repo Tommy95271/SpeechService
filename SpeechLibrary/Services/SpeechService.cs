@@ -9,12 +9,13 @@ namespace SpeechLibrary.Services
 {
     public class SpeechService
     {
-        public SpeechTranslationConfig translationConfig;
-        public TranslationRecognizer translationRecognizer;
-        public SpeechSynthesizer speechSynthesizer;
+        public TranslationRecognizer translationRecognizer { get; set; }
+        public SpeechSynthesizer speechSynthesizer { get; set; }
+        private CancellationTokenSource _cancellationTokenSource { get; set; }
 
-        public async Task<SpeechModel> TranslateFromMicrophoneAsync(SpeechTranslationConfig speechTranslationConfig, SpeechReq request)
+        public async Task<SpeechResponse> TranslateFromMicrophoneAsync(SpeechTranslationConfig speechTranslationConfig, SpeechRequest request)
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             speechTranslationConfig.SpeechRecognitionLanguage = request.SourceLanguage.GetLanguageDescription();
             speechTranslationConfig.AddTargetLanguage(request.TargetLanguage.GetLanguageDescription());
             speechTranslationConfig.SpeechSynthesisLanguage = request.TargetLanguage.GetLanguageDescription();
@@ -24,32 +25,50 @@ namespace SpeechLibrary.Services
             var result = await translationRecognizer.RecognizeOnceAsync();
             if (result.Reason == ResultReason.TranslatedSpeech)
             {
-                return new SpeechModel
+                return new SpeechResponse
                 {
-                    Id = result.ResultId,
-                    Text = result.Text,
-                    TextLocale = request.SourceLanguage.GetLanguageName(),
-                    Translation = result.Translations.Values.FirstOrDefault(),
-                    TranslationLocale = request.TargetLanguage.GetLanguageName(),
+                    IsSuccess = true,
+                    Message = "翻譯及語音成功",
+                    Model = new SpeechModel
+                    {
+                        Id = result.ResultId,
+                        Text = result.Text,
+                        TextLocale = request.SourceLanguage.GetLanguageName(),
+                        Translation = result.Translations.Values.FirstOrDefault(),
+                        TranslationLocale = request.TargetLanguage.GetLanguageName(),
+                    }
                 };
-
             }
             else if (result.Reason == ResultReason.NoMatch)
             {
-                return new SpeechModel
+                return new SpeechResponse
                 {
-                    Id = "Nothing",
-                    Text = "Nothing",
-                    Translation = "Nothing"
+                    IsSuccess = false,
+                    Message = "翻譯及語音失敗",
+                    Model = new SpeechModel
+                    {
+                        Id = string.Empty,
+                        Text = string.Empty,
+                        TextLocale = string.Empty,
+                        Translation = string.Empty,
+                        TranslationLocale = string.Empty,
+                    }
                 };
             }
             else
             {
-                return new SpeechModel
+                return new SpeechResponse
                 {
-                    Id = "Nothing",
-                    Text = "Nothing",
-                    Translation = "Nothing"
+                    IsSuccess = false,
+                    Message = "翻譯及語音失敗",
+                    Model = new SpeechModel
+                    {
+                        Id = string.Empty,
+                        Text = string.Empty,
+                        TextLocale = string.Empty,
+                        Translation = string.Empty,
+                        TranslationLocale = string.Empty,
+                    }
                 };
             }
         }
@@ -69,11 +88,19 @@ namespace SpeechLibrary.Services
             }
         }
 
-        public async Task StopAudioAsync(SpeechTranslationConfig speechTranslationConfig)
+        public async Task<SpeechResponse> StopAudioAsync(SpeechTranslationConfig speechTranslationConfig)
         {
-            speechSynthesizer = new SpeechSynthesizer(speechTranslationConfig);
-            await translationRecognizer.StopContinuousRecognitionAsync();
-            await speechSynthesizer.StopSpeakingAsync();
+            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+                if (_cancellationTokenSource.IsCancellationRequested)
+                {
+                    await translationRecognizer.StopContinuousRecognitionAsync();
+                    await speechSynthesizer.StopSpeakingAsync();
+                    return new SpeechResponse { IsSuccess = true, IsCancelled = true, Message = "翻譯及語音已取消" };
+                }
+            }
+            return new SpeechResponse { IsSuccess = true, IsCancelled = false, Message = "翻譯及語音成功" };
         }
 
         public List<SpeechEnumModel> GetLanguageEnums()

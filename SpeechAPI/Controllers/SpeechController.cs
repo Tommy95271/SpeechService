@@ -19,11 +19,18 @@ namespace SpeechAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<SpeechModel> TranslateFromMicrophoneAndPlay(SpeechReq request)
+        public async Task<SpeechResponse> TranslateFromMicrophoneAndPlay(SpeechRequest request)
         {
             var result = await _speechAPIService.TranslateFromMicrophoneAsync(request);
             return result;
         }
+
+        [HttpGet]
+        public async Task<SpeechResponse> StopPlayingAudio()
+        {
+            return await _speechAPIService.StopAudioAsync();
+        }
+
 
         [HttpGet]
         public async Task<List<SpeechEnumModel>> GetLanguageEnums()
