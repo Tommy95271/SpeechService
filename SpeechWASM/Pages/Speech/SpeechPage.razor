@@ -42,8 +42,8 @@
 </div>
 
 <div class="container mt-5">
-    @foreach (var item in speechModels)
+    @foreach (var item in Models)
     {
-        <Card Order="@item.Order" Text="@item.Text" TextLocale="@item.TextLocale" Translation="@item.Translation" TranslationLocale="@item.TranslationLocale"></Card>
+        <Card Model="@item"></Card>
     }
 </div>

@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
+using SpeechWASM.Models;
 
 namespace SpeechWASM.Components
 {
     public partial class Card
     {
         [Parameter]
-        public int Order { get; set; }
-        [Parameter]
-        public string? Text { get; set; }
-        [Parameter]
-        public string? TextLocale { get; set; }
-        [Parameter]
-        public string? Translation { get; set; }
-        [Parameter]
-        public string? TranslationLocale { get; set; }
+        public CardModel Model { get; set; }
     }
 }

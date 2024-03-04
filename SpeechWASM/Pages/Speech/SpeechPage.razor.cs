@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SpeechLibrary.Enums;
 using SpeechLibrary.Models;
+using SpeechWASM.Models;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -13,13 +14,13 @@ namespace SpeechWASM.Pages.Speech
         private int order { get; set; }
         private LanguageEnum targetLanguage { get; set; }
         private LanguageEnum sourceLanguage { get; set; }
-        private List<SpeechModel> speechModels { get; set; }
+        private List<CardModel> Models { get; set; }
         private List<SpeechEnumModel> sourceLanguages { get; set; }
         private List<SpeechEnumModel> targetLanguages { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            speechModels = new List<SpeechModel>();
+            Models = new List<CardModel>();
             sourceLanguages = new List<SpeechEnumModel>();
             targetLanguages = new List<SpeechEnumModel>();
             await GetEnums();
@@ -44,9 +45,8 @@ namespace SpeechWASM.Pages.Speech
                 var content = JsonSerializer.Deserialize<SpeechModel>(await result.Content.ReadAsStringAsync());
                 if (content != null)
                 {
-                    speechModels.Add(new SpeechModel
+                    Models.Add(new CardModel
                     {
-                        Id = content.Id,
                         Order = order++,
                         Text = content.Text,
                         TextLocale = content.TextLocale,
