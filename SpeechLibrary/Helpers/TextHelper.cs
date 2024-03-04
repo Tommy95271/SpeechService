@@ -13,10 +13,31 @@ namespace SpeechLibrary.Helpers
     {
         public static string GetDescriptionText(this Enum value)
         {
-            FieldInfo field = value.GetType().GetField(value.ToString());
-            DescriptionAttribute attribute =
-                (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
-            return attribute.Description;
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            var field = value.GetType().GetField(value.ToString());
+            if (field == null)
+            {
+                return value.ToString();
+            }
+
+            var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+            return attribute?.Description ?? value.ToString();
+        }
+
+        public static List<(Enum, string, string)> GetEnumDescriptions(this Type enumType)
+        {
+            if (!enumType.IsEnum)
+            {
+                throw new ArgumentException("The specified type is not an enum.");
+            }
+
+            return Enum.GetValues(enumType).Cast<Enum>()
+                       .Select(value => (value, GetDescriptionText(value), Enum.GetName(enumType, value) ?? string.Empty))
+                       .ToList();
         }
     }
 }

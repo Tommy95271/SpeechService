@@ -15,7 +15,11 @@ builder.Services.AddScoped<SpeechService>();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins, policy => { policy.WithOrigins("https://localhost:7130"); });
+    options.AddPolicy(MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:7130").AllowAnyHeader().AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();

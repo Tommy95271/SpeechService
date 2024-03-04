@@ -20,12 +20,9 @@ namespace SpeechAPI.Services
             _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
         }
 
-        public async Task<SpeechModel> TranslateFromMicrophoneAsync()
+        public async Task<SpeechModel> TranslateFromMicrophoneAsync(SpeechReq request)
         {
-            _speechTranslationConfig.SpeechRecognitionLanguage = "zh-TW";
-            _speechTranslationConfig.AddTargetLanguage("ja-JP");
-            _speechTranslationConfig.SpeechSynthesisLanguage = "ja-JP";
-            var result = await _speechService.TranslateFromMicrophoneAsync(_speechTranslationConfig);
+            var result = await _speechService.TranslateFromMicrophoneAsync(_speechTranslationConfig, request);
             await PlayTextAsAudioAsync(result.Translation ?? "test");
             return result;
         }
@@ -33,6 +30,12 @@ namespace SpeechAPI.Services
         public async Task PlayTextAsAudioAsync(string text)
         {
             await _speechService.PlayTextAsAudioAsync(_speechTranslationConfig, text);
+        }
+
+        public List<SpeechEnumModel> GetLanguageEnumsAsync()
+        {
+            var result = _speechService.GetLanguageEnums();
+            return result;
         }
 
         public async Task StopAudioAsync()

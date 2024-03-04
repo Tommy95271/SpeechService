@@ -18,17 +18,18 @@ namespace SpeechAPI.Controllers
             _speechAPIService = speechAPIService;
         }
 
-        [HttpGet]
-        public async Task<SpeechModel> TranslateFromMicrophoneAndPlay()
+        [HttpPost]
+        public async Task<SpeechModel> TranslateFromMicrophoneAndPlay(SpeechReq request)
         {
-            var result = await _speechAPIService.TranslateFromMicrophoneAsync();
+            var result = await _speechAPIService.TranslateFromMicrophoneAsync(request);
             return result;
         }
 
         [HttpGet]
-        public List<LanguageEnum> GetLanguageEnums()
+        public async Task<List<SpeechEnumModel>> GetLanguageEnums()
         {
-            return Enum.GetValues(typeof(LanguageEnum)).Cast<LanguageEnum>().ToList();
+            var result = _speechAPIService.GetLanguageEnumsAsync();
+            return result;
         }
     }
 }
