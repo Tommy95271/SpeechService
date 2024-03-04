@@ -44,7 +44,7 @@ namespace SpeechLibrary.Helpers
             return Enum.GetName(value.GetType(),value) ?? value.ToString();
         }
 
-        public static List<(Enum, string, string)> GetEnumDescriptions(this Type enumType)
+        public static List<(Enum Value, string Locale, string Name)> GetEnumDescriptions(this Type enumType)
         {
             if (!enumType.IsEnum)
             {

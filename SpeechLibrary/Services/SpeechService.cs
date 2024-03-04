@@ -108,9 +108,9 @@ namespace SpeechLibrary.Services
             return TextHelper.GetEnumDescriptions(typeof(LanguageEnum))
                 .Select(l => new SpeechEnumModel
                 {
-                    Value = (LanguageEnum)l.Item1,
-                    Locale = l.Item2,
-                    Text = l.Item3,
+                    Value = (LanguageEnum)l.Value,
+                    Locale = l.Locale,
+                    Text = l.Name,
                 }).ToList();
         }
     }
