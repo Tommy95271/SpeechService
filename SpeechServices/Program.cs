@@ -8,6 +8,7 @@ try
 {
     var configuration = new ConfigurationBuilder()
          .AddJsonFile($"appsettings.json");
+    var config = configuration.Build();
 
     //var config = configuration.Build();
 
@@ -26,7 +27,7 @@ try
 
 
     var speechService = host.Services.GetRequiredService<SpeechService>();
-    await speechService.Execute();
+    await speechService.Execute(config["SpeechConfig:SpeechKey"], config["SpeechConfig:SpeechRegion"]);
 }
 catch (Exception ex)
 {

@@ -1,4 +1,6 @@
 ﻿using Microsoft.CognitiveServices.Speech;
+using Microsoft.Extensions.Options;
+using SpeechAPI.Models;
 using SpeechLibrary.Models;
 using SpeechLibrary.Services;
 
@@ -9,14 +11,16 @@ namespace SpeechAPI.Services
         private string Key { get; set; }
         private string Region { get; set; }
         private readonly SpeechService _speechService;
+        private readonly AzureSpeech _azureSpeech;
 
         public SpeechTranslationConfig _speechTranslationConfig { get; set; }
 
-        public SpeechAPIService(SpeechService speechService)
+        public SpeechAPIService(SpeechService speechService, IOptions<AzureSpeech> azureSpeech)
         {
-            Key = "key";
-            Region = "region";
             _speechService = speechService;
+            _azureSpeech = azureSpeech.Value;
+            Key = _azureSpeech.Key;
+            Region = _azureSpeech.Region;
             _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
         }
 

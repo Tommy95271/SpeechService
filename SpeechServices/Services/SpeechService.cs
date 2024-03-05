@@ -11,16 +11,16 @@ namespace SpeechServices.Services
 {
     internal class SpeechService
     {
-        internal async Task Execute()
+        internal async Task Execute(string key, string region)
         {
-            var speechConfig = SpeechConfig.FromSubscription("key", "region");
+            var speechConfig = SpeechConfig.FromSubscription(key, region);
             speechConfig.SpeechSynthesisLanguage = "en";
             speechConfig.SpeechSynthesisVoiceName = "en-US-AndrewNeural";
             speechConfig.SpeechRecognitionLanguage = "zh-TW";
             speechConfig.SetProperty(PropertyId.Speech_SegmentationSilenceTimeoutMs, "1000");
             speechConfig.SetProperty(PropertyId.Speech_LogFilename, "./mylog2");
 
-            var speechTranslationConfig = SpeechTranslationConfig.FromSubscription("key", "region");
+            var speechTranslationConfig = SpeechTranslationConfig.FromSubscription(key, region);
             speechTranslationConfig.SpeechRecognitionLanguage = "zh-TW";
             speechTranslationConfig.AddTargetLanguage("en");
             //await FromFile(speechConfig);

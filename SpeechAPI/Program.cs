@@ -1,3 +1,4 @@
+using SpeechAPI.Models;
 using SpeechAPI.Services;
 using SpeechLibrary.Services;
 
@@ -9,6 +10,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<AzureSpeech>(builder.Configuration.GetSection("AzureSpeech"));
 
 builder.Services.AddSingleton<SpeechAPIService>();
 builder.Services.AddSingleton<SpeechService>();
