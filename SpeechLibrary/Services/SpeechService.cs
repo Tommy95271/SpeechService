@@ -11,11 +11,9 @@ namespace SpeechLibrary.Services
     {
         public TranslationRecognizer translationRecognizer { get; set; }
         public SpeechSynthesizer speechSynthesizer { get; set; }
-        private CancellationTokenSource _cancellationTokenSource { get; set; }
 
         public async Task<SpeechResponse> TranslateFromMicrophoneAsync(SpeechTranslationConfig speechTranslationConfig, SpeechRequest request)
         {
-            _cancellationTokenSource = new CancellationTokenSource();
             speechTranslationConfig.SpeechRecognitionLanguage = request.SourceLanguage.GetLanguageDescription();
             speechTranslationConfig.AddTargetLanguage(request.TargetLanguage.GetLanguageDescription());
             speechTranslationConfig.SpeechSynthesisLanguage = request.TargetLanguage.GetLanguageDescription();
@@ -88,19 +86,11 @@ namespace SpeechLibrary.Services
             }
         }
 
-        public async Task<SpeechResponse> StopAudioAsync(SpeechTranslationConfig speechTranslationConfig)
+        public async Task<SpeechResponse> StopAudioAsync()
         {
-            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
-            {
-                _cancellationTokenSource.Cancel();
-                if (_cancellationTokenSource.IsCancellationRequested)
-                {
-                    await translationRecognizer.StopContinuousRecognitionAsync();
-                    await speechSynthesizer.StopSpeakingAsync();
-                    return new SpeechResponse { IsSuccess = true, IsCancelled = true, Message = "翻譯及語音已取消" };
-                }
-            }
-            return new SpeechResponse { IsSuccess = true, IsCancelled = false, Message = "翻譯及語音成功" };
+            await translationRecognizer.StopContinuousRecognitionAsync();
+            await speechSynthesizer.StopSpeakingAsync();
+            return new SpeechResponse { IsSuccess = true, IsCancelled = true, Message = "翻譯及語音已取消" };
         }
 
         public List<SpeechEnumModel> GetLanguageEnums()

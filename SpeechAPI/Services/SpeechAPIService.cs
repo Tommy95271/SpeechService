@@ -8,8 +8,8 @@ namespace SpeechAPI.Services
 {
     public class SpeechAPIService
     {
-        private string Key { get; set; }
-        private string Region { get; set; }
+        private string key { get; set; }
+        private string region { get; set; }
         private readonly SpeechService _speechService;
         private readonly AzureSpeech _azureSpeech;
 
@@ -19,9 +19,9 @@ namespace SpeechAPI.Services
         {
             _speechService = speechService;
             _azureSpeech = azureSpeech.Value;
-            Key = _azureSpeech.Key;
-            Region = _azureSpeech.Region;
-            _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(Key, Region);
+            key = _azureSpeech.Key;
+            region = _azureSpeech.Region;
+            _speechTranslationConfig = SpeechTranslationConfig.FromSubscription(key, region);
         }
 
         public async Task<SpeechResponse> TranslateFromMicrophoneAsync(SpeechRequest request)
@@ -44,7 +44,7 @@ namespace SpeechAPI.Services
 
         public async Task<SpeechResponse> StopAudioAsync()
         {
-            return await _speechService.StopAudioAsync(_speechTranslationConfig);
+            return await _speechService.StopAudioAsync();
         }
     }
 }
