@@ -2,13 +2,6 @@
 
 <h3>SpeechPage</h3>
 
-<button class="btn btn-primary" @onclick="Translate">Speak</button>
-<button class="btn btn-primary" @onclick="Stop" disabled="@isSpeaking">Stop</button>
-@if (isCancelled)
-{
-    <div>語音服務已中斷</div>
-}
-
 <div class="my-2">
     <h3>Source language</h3>
     @if (sourceLanguages != null && sourceLanguages.Count > 0)
@@ -45,6 +38,18 @@
         <p>Loading locales...</p>
     }
 </div>
+
+@if (targetEqualsSource)
+{
+    <div>目標語言不能與來源語言相同</div>
+}
+
+<button class="btn btn-primary" @onclick="Translate" disabled="@(!isSpeaking)">Speak</button>
+<button class="btn btn-primary" @onclick="Stop" disabled="@isStopped">Stop</button>
+@if (!isSuccess)
+{
+    <div>@message</div>
+}
 
 <div class="container mt-5">
     @foreach (var item in Models)

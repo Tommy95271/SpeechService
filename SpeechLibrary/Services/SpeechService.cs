@@ -42,7 +42,7 @@ namespace SpeechLibrary.Services
                 return new SpeechResponse
                 {
                     IsSuccess = false,
-                    Message = "翻譯及語音失敗",
+                    Message = "翻譯及語音失敗，找不到對應的文字",
                     Model = new SpeechModel
                     {
                         Id = string.Empty,
@@ -90,7 +90,7 @@ namespace SpeechLibrary.Services
         {
             await translationRecognizer.StopContinuousRecognitionAsync();
             await speechSynthesizer.StopSpeakingAsync();
-            return new SpeechResponse { IsSuccess = true, IsCancelled = true, Message = "翻譯及語音已取消" };
+            return new SpeechResponse { IsSuccess = false, IsCancelled = true, Message = "翻譯及語音已取消" };
         }
 
         public List<SpeechEnumModel> GetLanguageEnums()

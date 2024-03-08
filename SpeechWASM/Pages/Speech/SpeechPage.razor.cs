@@ -12,8 +12,12 @@ namespace SpeechWASM.Pages.Speech
         [Inject]
         private HttpClient httpClient { get; set; }
         private int order { get; set; }
+        private bool isSuccess { get; set; }
         private bool isCancelled { get; set; }
+        private bool isStopped { get; set; }
         private bool isSpeaking { get; set; }
+        private bool targetEqualsSource { get; set; }
+        private string? message { get; set; }
         private LanguageEnum targetLanguage { get; set; }
         private LanguageEnum sourceLanguage { get; set; }
         private List<CardModel> Models { get; set; }
@@ -27,12 +31,15 @@ namespace SpeechWASM.Pages.Speech
             targetLanguages = new List<SpeechEnumModel>();
             await GetEnums();
             order = 1;
+            isStopped = true;
             isSpeaking = true;
+            targetLanguage = LanguageEnum.English;
         }
 
         private async Task Translate()
         {
-            isSpeaking = false;
+            isStopped = false;
+            isSuccess = true;
             LanguageEnum source, target;
             SpeechRequest req;
             if (Enum.TryParse(targetLanguage.ToString(), out target) && Enum.TryParse(sourceLanguage.ToString(), out source))
@@ -49,19 +56,29 @@ namespace SpeechWASM.Pages.Speech
                 var content = JsonSerializer.Deserialize<SpeechResponse>(await result.Content.ReadAsStringAsync());
                 if (content != null)
                 {
-                    var model = content.Model;
-                    Models.Add(new CardModel
+                    isSuccess = content.IsSuccess;
+                    if (isSuccess)
                     {
-                        Order = order++,
-                        Text = model.Text,
-                        TextLocale = model.TextLocale,
-                        Translation = model.Translation,
-                        TranslationLocale = model.TranslationLocale,
-                    });
+                        var model = content.Model;
+                        Models.Add(new CardModel
+                        {
+                            Order = order++,
+                            Text = model.Text,
+                            TextLocale = model.TextLocale,
+                            Translation = model.Translation,
+                            TranslationLocale = model.TranslationLocale,
+                        });
+                    }
+                    else
+                    {
+                        if (!isCancelled)
+                        {
+                            message = content.Message;
+                        }
+                    }
                 }
             }
-            isSpeaking = true;
-            isCancelled = false;
+            isStopped = true;
         }
 
         private async Task Stop()
@@ -72,7 +89,9 @@ namespace SpeechWASM.Pages.Speech
                 var content = JsonSerializer.Deserialize<SpeechResponse>(await result.Content.ReadAsStringAsync());
                 if (content != null)
                 {
+                    isSuccess = content.IsSuccess;
                     isCancelled = content.IsCancelled;
+                    message = content.Message;
                 }
             }
         }
@@ -100,6 +119,16 @@ namespace SpeechWASM.Pages.Speech
             else
             {
                 targetLanguage = value;
+            }
+            if (targetLanguage == sourceLanguage)
+            {
+                targetEqualsSource = true;
+                isSpeaking = false;
+            }
+            else
+            {
+                targetEqualsSource = false;
+                isSpeaking = true;
             }
         }
     }

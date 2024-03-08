@@ -27,7 +27,7 @@ namespace SpeechAPI.Services
         public async Task<SpeechResponse> TranslateFromMicrophoneAsync(SpeechRequest request)
         {
             var result = await _speechService.TranslateFromMicrophoneAsync(_speechTranslationConfig, request);
-            await PlayTextAsAudioAsync(result.Model.Translation ?? "test");
+            await PlayTextAsAudioAsync(string.IsNullOrWhiteSpace(result.Model.Translation) ? "test" : result.Model.Translation);
             return result;
         }
 
