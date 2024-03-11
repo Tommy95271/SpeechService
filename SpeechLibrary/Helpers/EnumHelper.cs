@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SpeechLibrary.Helpers
 {
-    public static class TextHelper
+    public static class EnumHelper
     {
         public static string GetLanguageDescription(this Enum value)
         {

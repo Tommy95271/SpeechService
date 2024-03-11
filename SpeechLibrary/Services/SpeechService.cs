@@ -95,7 +95,7 @@ namespace SpeechLibrary.Services
 
         public List<SpeechEnumModel> GetLanguageEnums()
         {
-            return TextHelper.GetEnumDescriptions(typeof(LanguageEnum))
+            return EnumHelper.GetEnumDescriptions(typeof(LanguageEnum))
                 .Select(l => new SpeechEnumModel
                 {
                     Value = (LanguageEnum)l.Value,
